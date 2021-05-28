@@ -1,0 +1,40 @@
+library(reticulate)
+library(datasets)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(testthat)
+py_config()
+
+# repl_python()
+
+# import numpy as np
+np <- import('numpy', as='np')
+# import pandas as pd
+pd <- import('pandas', as='pd')
+# import matplotlib.pyplot as plt
+plt <- import('matplotlib.pyplot', as='plt')
+# importing the dataset
+data(iris)
+#
+# Bringing Pandas functions to R
+#
+dataframe <- r_to_py(iris)
+expect_is(dataframe,class = "pd.core.frame.DataFrame")
+# Cumulative Functions
+grouped.sp.cnt <- dataframe$groupby('Species')$cumcount()
+grouped.sp.max <- dataframe$groupby('Species')$cummax()
+grouped.sp.min <- dataframe$groupby('Species')$cummin()
+grouped.sp.prod <- dataframe$groupby('Species')$cumprod()
+grouped.sp.sum <- dataframe$groupby('Species')$cumsum()
+# Transformations
+# grouped.transform(lambda x: (x - x.mean()) / x.std())
+transformation <- py_run_string("
+def transform(x):
+  return (x - x.mean()) / x.std()")
+grouped.sp.transform <- dataframe$groupby('Species')$transform(transformation$transform)
+
+
+
+
+

@@ -1,0 +1,30 @@
+library(reticulate)
+library(datasets)
+library(dplyr)
+py_config()
+# py_install("seaborn")
+# repl_python()
+
+# import numpy as np
+np <- import('numpy', as='np')
+# import pandas as pd
+pd <- import('pandas', as='pd')
+# import matplotlib.pyplot as plt
+plt <- import('matplotlib.pyplot', as='plt')
+# import seaborn as sns
+sns <- import('seaborn', as='sns')
+sns$set()
+sns$set_theme(style="whitegrid")
+#
+num <- 350L
+#
+x.start <- -100L
+x.stop <- 100L
+x <- np$linspace(x.start, x.stop, num)
+y <- (1.1 * x)**5 - 5 * x ** 3 + 7 * x ** 2 + 10 * np$random$rand(num)
+colors <- np$around(np$random$rand(num), decimals=2L)
+data.raw <- data.frame(cbind(x, y, colors))
+colnames(data.raw) <- c('features', 'target', 'hue')
+plot <- sns$lineplot(x='features', y='target', hue='hue', data=data.raw)
+plt$show(plot)
+
